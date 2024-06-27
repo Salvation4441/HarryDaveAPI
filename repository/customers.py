@@ -6,7 +6,7 @@ from models import Customers, Order
 import schemas
 
 
-# get all Customerss
+# get all Customers
 def get_all(db: Session):
     customers = db.query(models.Customers).all()
     return customers

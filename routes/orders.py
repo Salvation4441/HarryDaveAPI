@@ -2,6 +2,7 @@ from typing import List
 from fastapi import Depends, status, APIRouter
 from sqlalchemy.orm import Session
 import database
+import oauth2
 from repository import orders
 import schemas
 
@@ -12,7 +13,7 @@ conn = database.connection
 
 
 @router.get('/', response_model=List[schemas.Order])
-def get_all(db: Session = Depends(conn)):
+def get_all(db: Session = Depends(conn),get_current_user: schemas.Staff = Depends(oauth2.get_current_user)):
     return orders.get_all(db)
 
 

@@ -3,6 +3,7 @@ from fastapi import  status, HTTPException
 
 import models
 import schemas
+from hashing import Hash
 
 
 # get all Staffs
@@ -12,8 +13,15 @@ def get_all(db: Session):
 
 
 def create(request: schemas.Staff, db: Session):
+    # Check if the user already exists
+    exiting_user = db.query(models.Staff).filter(models.Staff.email == request.email).first()
+    if exiting_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="User with this email already exists")
     staff = models.Staff(
-        name=request.name,
+        firstname=request.firstname,
+        lastname = request.lastname,
+        password= Hash.bcrypt(request.password),
         email = request.email,
         phone = request.phone,
         role = request.role,

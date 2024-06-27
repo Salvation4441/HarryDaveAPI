@@ -16,10 +16,10 @@ class Customers(Base):
     address = Column(String)
     city = Column(String)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     orders = relationship('Order', back_populates='customer')
-    deliveries = relationship('Delivery',back_populates='customer')
+    deliveries = relationship('Delivery', back_populates='customer')
 
 
 # # category
@@ -29,7 +29,7 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
     products = relationship('Products', back_populates='category')
 
 
@@ -42,10 +42,11 @@ class Products(Base):
     description = Column(String)
     price = Column(Numeric(10, 2), nullable=False)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     category_id = Column(Integer, ForeignKey('categories.id'))
     category = relationship('Category', back_populates='products')
+
 
 # Order class
 class Order(Base):
@@ -58,8 +59,7 @@ class Order(Base):
     total_amount = Column(Numeric(10, 2))
     customer_id = Column(Integer, ForeignKey('customers.id'))
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
-
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     customer = relationship('Customers', back_populates='orders')
     order_details = relationship('OrderDetail', back_populates='order')
@@ -79,7 +79,7 @@ class OrderDetail(Base):
     quantity = Column(Integer)
     price = Column(Numeric(10, 2))
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
     order = relationship('Order', back_populates='order_details')
 
 
@@ -93,7 +93,7 @@ class Payment(Base):
     payment_method = Column(String(50))
     amount = Column(Numeric(10, 2), nullable=False)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # staff_id should be here
 
@@ -107,7 +107,7 @@ class PaymentMethod(Base):
     payment_method_id = Column(Integer, primary_key=True, index=True)
     payment_method_name = Column(String(50), nullable=False)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 # PaymentStatus class
@@ -117,7 +117,7 @@ class PaymentStatus(Base):
     payment_status_id = Column(Integer, primary_key=True, index=True)
     payment_status_name = Column(String(50), nullable=False)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 # Rider class
@@ -132,9 +132,9 @@ class Staff(Base):
     email = Column(String)
     role = Column(String(100), nullable=False)
     password = Column(String)
-    card_number= Column(String)
+    card_number = Column(String)
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     order_staff = relationship('OrderStaff', back_populates='staff')
     deliveries = relationship('Delivery', back_populates='staff')
@@ -150,7 +150,7 @@ class OrderStaff(Base):
     order_id = Column(Integer, ForeignKey('orders.id'))
     staff_id = Column(Integer, ForeignKey('staff.id'))
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     order = relationship('Order', back_populates='order_staff')
     staff = relationship('Staff', back_populates='order_staff')
@@ -158,18 +158,19 @@ class OrderStaff(Base):
 
 # Delivery class
 class Delivery(Base):
-    __tablename__ = 'deliveries'
+    __tablename__ = 'delivery'
 
     delivery_id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey('orders.id'))
     staff_id = Column(Integer, ForeignKey('staff.id'))
     customer_id = Column(Integer, ForeignKey('customers.id'))
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    order = relationship('Order', back_populates='deliveries')
-    staff = relationship('Staff', back_populates='deliveries')
-    customer = relationship('Customers', back_populates='deliveries')
+    order = relationship('Order', back_populates='delivery')
+    staff = relationship('Staff', back_populates='delivery')
+    customer = relationship('Customers', back_populates='delivery')
+
 
 # DeliveryStatus class
 class DeliveryStatus(Base):
@@ -179,6 +180,6 @@ class DeliveryStatus(Base):
     delivery_status = Column(String(100), nullable=False)
     order_id = Column(Integer, ForeignKey('orders.id'))
     createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime,default=func.now(), onupdate=func.now())
+    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     order = relationship('Order', back_populates='delivery_status')

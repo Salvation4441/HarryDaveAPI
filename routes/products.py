@@ -4,6 +4,7 @@ from fastapi import Depends, status, APIRouter
 from sqlalchemy.orm import Session
 
 import database
+import oauth2
 from repository import products
 import schemas
 

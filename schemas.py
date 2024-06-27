@@ -78,21 +78,16 @@ class DeliveryBase(BaseModel):
     order_id: int
     staff_id: int
     customer_id: int
-    createdAt: datetime.datetime
-    updatedAt: datetime.datetime
 
 
 class Delivery(DeliveryBase):
     delivery_id: int
-    order_id: int
-    staff_id: int
-    customer_id: int
+    createdAt: datetime.datetime
+    updatedAt: datetime.datetime
 
     class Config:
         orm_mode = True
-
-
-##########################################################################
+        # arbitrary_types_allowed = True
 
 
 # Staff
@@ -103,9 +98,11 @@ class StaffBase(BaseModel):
 
 
 class Staff(StaffBase):
-    name: str
+    firstname: str
+    lastname: str
     phone: str
     email: str
+    password: str
     role: List[str]
     card_number: str
     order_staffs: List[OrderStaff] = []
@@ -203,6 +200,22 @@ class SignIn(BaseModel):
 
 
 ####################################################################
+# delivery status
+class DeliveryStatusBase(BaseModel):
+    delivery_status: str
+    order_id: int
+
+
+class DeliveryStatus(DeliveryStatusBase):
+    delivery_status_id: int
+    createdAt: datetime
+    updatedAt: datetime
+
+    class Config:
+        orm_mode: True
+
+
+####################################################################
 # from the token generation
 class Token(BaseModel):
     access_token: str
@@ -211,5 +224,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+    email: str
     role: List[str] = []
 #####################################################################

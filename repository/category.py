@@ -10,9 +10,10 @@ def get_all(db: Session):
     category = db.query(models.Category).all()
     return category
 
+
 def create(request: schemas.Category, db: Session):
     category = models.Category(
-        name = request.name
+        name=request.name
     )
     db.add(category)
     db.commit()
@@ -50,4 +51,3 @@ def show(id: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="products not found")
     return category
-
