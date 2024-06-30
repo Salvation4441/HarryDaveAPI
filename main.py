@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from database import engine
 import models
-from routes import customers, products, orders, category, staff, authentication, delivery, delivery_status
+from routes import products, orders, category, staff, authentication, delivery,  customers
 
 app = FastAPI()
 
@@ -17,5 +17,5 @@ app.include_router(products.router)
 app.include_router(category.router)
 app.include_router(orders.router)
 app.include_router(delivery.router)
-app.include_router(delivery_status.router)
+
 

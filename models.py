@@ -15,16 +15,17 @@ class Customers(Base):
     phone_number = Column(String)
     address = Column(String)
     city = Column(String)
+    password = Column(String)
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    orders = relationship('Order', back_populates='customer')
-    deliveries = relationship('Delivery', back_populates='customer')
+    orders = relationship('Order', back_populates='customers')
+    delivery = relationship('Delivery', back_populates='customers')
 
 
 # # category
 class Category(Base):
-    __tablename__ = 'categories'
+    __tablename__ = 'category'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
@@ -44,7 +45,7 @@ class Products(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    category_id = Column(Integer, ForeignKey('categories.id'))
+    category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship('Category', back_populates='products')
 
 
@@ -61,12 +62,12 @@ class Order(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    customer = relationship('Customers', back_populates='orders')
-    order_details = relationship('OrderDetail', back_populates='order')
-    payment = relationship('Payment', uselist=False, back_populates='order')
-    order_staff = relationship('OrderStaff', back_populates='order')
-    deliveries = relationship('Delivery', back_populates='order')
-    delivery_status = relationship('DeliveryStatus', back_populates='order')
+    customers = relationship('Customers', back_populates='orders')
+    order_details = relationship('OrderDetail', back_populates='orders')
+    payments = relationship('Payment', uselist=False, back_populates='orders')
+    order_staff = relationship('OrderStaff', back_populates='orders')
+    delivery = relationship('Delivery', back_populates='orders')
+
 
 
 # OrderDetail class
@@ -80,7 +81,8 @@ class OrderDetail(Base):
     price = Column(Numeric(10, 2))
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
-    order = relationship('Order', back_populates='order_details')
+
+    orders = relationship('Order', back_populates='order_details')
 
 
 # Payment class
@@ -97,7 +99,7 @@ class Payment(Base):
 
     # staff_id should be here
 
-    order = relationship('Order', back_populates='payment')
+    orders = relationship('Order', back_populates='payments')
 
 
 # PaymentMethod class
@@ -137,7 +139,7 @@ class Staff(Base):
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
     order_staff = relationship('OrderStaff', back_populates='staff')
-    deliveries = relationship('Delivery', back_populates='staff')
+    delivery = relationship('Delivery', back_populates='staff')
 
 
 # OrderStaff class
@@ -152,7 +154,7 @@ class OrderStaff(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    order = relationship('Order', back_populates='order_staff')
+    orders = relationship('Order', back_populates='order_staff')
     staff = relationship('Staff', back_populates='order_staff')
 
 
@@ -161,25 +163,15 @@ class Delivery(Base):
     __tablename__ = 'delivery'
 
     delivery_id = Column(Integer, primary_key=True, index=True)
+    delivery_status = Column(String(100), nullable=False)
     order_id = Column(Integer, ForeignKey('orders.id'))
     staff_id = Column(Integer, ForeignKey('staff.id'))
     customer_id = Column(Integer, ForeignKey('customers.id'))
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    order = relationship('Order', back_populates='delivery')
+    orders = relationship('Order', back_populates='delivery')
     staff = relationship('Staff', back_populates='delivery')
-    customer = relationship('Customers', back_populates='delivery')
+    customers = relationship('Customers', back_populates='delivery')
 
 
-# DeliveryStatus class
-class DeliveryStatus(Base):
-    __tablename__ = 'delivery_status'
-
-    delivery_status_id = Column(Integer, primary_key=True, index=True)
-    delivery_status = Column(String(100), nullable=False)
-    order_id = Column(Integer, ForeignKey('orders.id'))
-    createdAt = Column(DateTime, default=func.now())
-    updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
-
-    order = relationship('Order', back_populates='delivery_status')

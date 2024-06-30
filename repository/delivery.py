@@ -14,6 +14,7 @@ def get_all(db: Session):
 def create(request: schemas.Delivery, db: Session):
     delivery = models.Delivery(
         delivery_id = request.delivery_id,
+        delivery_status = request.delivery_status,
         order_id = request.order_id,
         staff_id = request.staff_id,
         customer_id = request.customer_id,
