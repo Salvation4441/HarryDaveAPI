@@ -11,7 +11,7 @@ def get_all(db: Session):
     return order
 
 
-def create(request: schemas.Order, db: Session,user):
+def create(request: schemas.Order, db: Session):
     order = models.Order(
         order_date=request.order_date,
         delivery_address=request.delivery_address,

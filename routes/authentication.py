@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi import Depends, status, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -15,10 +17,31 @@ router = APIRouter(
 conn = database.connection
 
 
+# auth user
+# def authenticate_user(db: Session, username: str, password: str) -> Union[models.Customers, models.Staff, None]:
+#     user = db.query(models.Staff).filter(models.Staff.email == username).first()
+#     if user and Hash.verify(user.password, password):
+#         return user
+#
+#     user = db.query(models.Customers).filter(models.Customers.email == username).first()
+#     if user and Hash.verify(user.password, password):
+#         return user
+#
+#     return None
+
+
 # signin
 @router.post('/')
 def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(conn)):
     user = db.query(models.Staff).filter(models.Staff.email == request.username).first()
+    # user = authenticate_user(db, request.username, request.password)
+    user_count = db.query(models.Staff).count() + db.query(models.Customers).count()
+    if user_count < 1:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No user in the database"
+        )
+
     # if user is not logged in
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

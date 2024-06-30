@@ -77,6 +77,7 @@ class OrderStaff(OrderStaffBase):
 class DeliveryBase(BaseModel):
     order_id: int
     staff_id: int
+    delivery_status: str
     customer_id: int
 
 
@@ -103,10 +104,10 @@ class Staff(StaffBase):
     phone: str
     email: str
     password: str
-    role: List[str]
+    role: str
     card_number: str
     order_staffs: List[OrderStaff] = []
-    deliveries: List[Delivery] = []
+    delivery: List[Delivery] = []
 
     class Config:
         orm_mode = True
@@ -155,6 +156,7 @@ class CustomersBase(BaseModel):
 
 class Customers(CustomersBase):
     orders: List[Order] = []
+    password:str
 
     class Config:
         orm_mode = True
@@ -200,19 +202,6 @@ class SignIn(BaseModel):
 
 
 ####################################################################
-# delivery status
-class DeliveryStatusBase(BaseModel):
-    delivery_status: str
-    order_id: int
-
-
-class DeliveryStatus(DeliveryStatusBase):
-    delivery_status_id: int
-    createdAt: datetime
-    updatedAt: datetime
-
-    class Config:
-        orm_mode: True
 
 
 ####################################################################

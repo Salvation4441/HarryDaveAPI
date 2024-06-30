@@ -14,11 +14,17 @@ def get_all(db: Session):
 
 # create Customers
 def create(request: schemas.Customers, db: Session):
+    # Check if the user already exists
+    exiting_user = db.query(models.Customers).filter(models.Customers.email == request.email).first()
+    if exiting_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"User with this {request.email} already exists")
     customers = models.Customers(
         firstname=request.firstname,
         lastname=request.lastname,
         email=request.email,
         phone_number=request.phone_number,
+        password = request.password,
         address=request.address,
         city=request.city,
         orders=request.orders,
