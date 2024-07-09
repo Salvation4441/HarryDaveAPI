@@ -17,12 +17,14 @@ conn = database.connection
 @router.get('/', response_model=List[schemas.Customers])
 def get_all(db: Session = Depends(conn)):
     return customers.get_all(db)
+
+
 # get_current_user: schemas.Staff = Depends(oauth2.get_current_user)
 
 # create a Customers
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create(request: schemas.Customers, db: Session = Depends(conn)):
-    return customers.create(request, db)
+    return customers.create(request, db,)
 
 
 # get Customers data with id

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, status, HTTPException
 
 import models
+from hashing import Hash
 from models import Customers, Order
 import schemas
 
@@ -24,12 +25,10 @@ def create(request: schemas.Customers, db: Session):
         lastname=request.lastname,
         email=request.email,
         phone_number=request.phone_number,
-        password = request.password,
+        password= Hash.bcrypt(request.password),
         address=request.address,
         city=request.city,
-        orders=request.orders,
-        createdAt = request.createdAt,
-        updatedAt = request.updatedAt
+        orders=request.orders
     )
     if request.orders:
         customers.orders = [

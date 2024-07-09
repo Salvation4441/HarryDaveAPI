@@ -1,10 +1,18 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Numeric, DateTime, func
+from sqlalchemy import Column, Integer, String, ForeignKey, Numeric, DateTime, Table, func
 from database import Base
 from sqlalchemy.orm import relationship
-from typing import Optional
 
+# Association table for customers and products
+customer_product_association = Table(
+    'customer_product',
+    Base.metadata,
+    Column('customer_id', Integer, ForeignKey('customers.id'), primary_key=True),
+    Column('product_id', Integer, ForeignKey('products.id'), primary_key=True),
+    Column('createdAt', DateTime, default=func.now()),
+    Column('updatedAt', DateTime, default=func.now(), onupdate=func.now())
+)
 
-# customer
+# Customer class
 class Customers(Base):
     __tablename__ = 'customers'
 
@@ -19,11 +27,12 @@ class Customers(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    orders = relationship('Order', back_populates='customers')
-    delivery = relationship('Delivery', back_populates='customers')
+    orders = relationship('Order', back_populates='customer')
+    delivery = relationship('Delivery', back_populates='customer')
+    products = relationship('Products', secondary=customer_product_association, back_populates='customers')
 
 
-# # category
+# Category class
 class Category(Base):
     __tablename__ = 'category'
 
@@ -34,7 +43,7 @@ class Category(Base):
     products = relationship('Products', back_populates='category')
 
 
-# # product
+# Product class
 class Products(Base):
     __tablename__ = 'products'
 
@@ -47,6 +56,7 @@ class Products(Base):
 
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship('Category', back_populates='products')
+    customers = relationship('Customers', secondary=customer_product_association, back_populates='products')
 
 
 # Order class
@@ -62,12 +72,11 @@ class Order(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    customers = relationship('Customers', back_populates='orders')
-    order_details = relationship('OrderDetail', back_populates='orders')
-    payments = relationship('Payment', uselist=False, back_populates='orders')
-    order_staff = relationship('OrderStaff', back_populates='orders')
-    delivery = relationship('Delivery', back_populates='orders')
-
+    customer = relationship('Customers', back_populates='orders')
+    order_details = relationship('OrderDetail', back_populates='order')
+    payments = relationship('Payment', uselist=False, back_populates='order')
+    order_staff = relationship('OrderStaff', back_populates='order')
+    delivery = relationship('Delivery', back_populates='order')
 
 
 # OrderDetail class
@@ -82,7 +91,7 @@ class OrderDetail(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    orders = relationship('Order', back_populates='order_details')
+    order = relationship('Order', back_populates='order_details')
 
 
 # Payment class
@@ -97,9 +106,7 @@ class Payment(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    # staff_id should be here
-
-    orders = relationship('Order', back_populates='payments')
+    order = relationship('Order', back_populates='payments')
 
 
 # PaymentMethod class
@@ -122,8 +129,7 @@ class PaymentStatus(Base):
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
-# Rider class
-# change the riders to staff
+# Staff class
 class Staff(Base):
     __tablename__ = 'staff'
 
@@ -143,7 +149,6 @@ class Staff(Base):
 
 
 # OrderStaff class
-# change it to staff (tablename)
 class OrderStaff(Base):
     __tablename__ = 'order_staff'
 
@@ -154,7 +159,7 @@ class OrderStaff(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    orders = relationship('Order', back_populates='order_staff')
+    order = relationship('Order', back_populates='order_staff')
     staff = relationship('Staff', back_populates='order_staff')
 
 
@@ -170,8 +175,6 @@ class Delivery(Base):
     createdAt = Column(DateTime, default=func.now())
     updatedAt = Column(DateTime, default=func.now(), onupdate=func.now())
 
-    orders = relationship('Order', back_populates='delivery')
+    order = relationship('Order', back_populates='delivery')
     staff = relationship('Staff', back_populates='delivery')
-    customers = relationship('Customers', back_populates='delivery')
-
-
+    customer = relationship('Customers', back_populates='delivery')

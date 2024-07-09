@@ -19,13 +19,13 @@ def get_all(db: Session = Depends(conn),get_current_user: schemas.Staff = Depend
 
 # create a Order
 @router.post('/', status_code=status.HTTP_201_CREATED)
-def create(request: schemas.Order, db: Session = Depends(conn)):
+def create(request: schemas.Order, db: Session = Depends(conn),get_current_user: schemas.Staff = Depends(oauth2.get_current_user)):
     return orders.create(request, db)
 
 
 # get Order data with id
 @router.get('/{id}', status_code=status.HTTP_200_OK, response_model=schemas.OrdersBase)
-def get_order_id(id, db: Session = Depends(conn)):
+def get_order_id(id, db: Session = Depends(conn),get_current_user: schemas.Staff = Depends(oauth2.get_current_user)):
     return orders.show(id, db)
 
 
@@ -37,5 +37,5 @@ def get_order_id(id, db: Session = Depends(conn)):
 
 # update the Order
 @router.put('/{id}', status_code=status.HTTP_202_ACCEPTED)
-def update_order(id, request: schemas.Order, db: Session = Depends(conn)):
+def update_order(id, request: schemas.Order, db: Session = Depends(conn),get_current_user: schemas.Staff = Depends(oauth2.get_current_user)):
     return orders.update(id, request, db)

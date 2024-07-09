@@ -26,8 +26,6 @@ def create(request: schemas.Staff, db: Session):
         phone = request.phone,
         role = request.role,
         card_number= request.card_number,
-        createdAt = request.createdAt,
-        updatedAt = request.updatedAt
     )
     db.add(staff)
     db.commit()

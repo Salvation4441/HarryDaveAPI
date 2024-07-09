@@ -123,17 +123,20 @@ class OrdersBase(BaseModel):
     delivery_address: Optional[str] = None
     order_status: str
     total_amount: float
+    customer_id: int
+    order_details: Optional[List[OrderDetailBase]] = []
+    payment: Optional[PaymentBase] = None
+    order_staffs: Optional[List[OrderStaffBase]] = []
+    deliveries: Optional[List[DeliveryBase]] = []
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
 
 class Order(OrdersBase):
-    id: int
-    # customer: Customers  # Replace with actual customer schema import
-    order_details: List[OrderDetail] = []  # Replace with actual order detail schema import
-    payment: Optional[Payment] = None  # Replace with actual payment schema import
-    order_staffs: List[OrderStaff] = []  # Replace with actual order Staff schema import
-    deliveries: List[Delivery] = []  # Replace with actual delivery schema import
+    order_details: List[OrderDetail] = []
+    payment: Optional[Payment] = None
+    order_staffs: str
+    deliveries: List[Delivery] = []
 
     class Config:
         orm_mode = True
@@ -214,5 +217,5 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
     email: str
-    role: List[str] = []
+    role: str
 #####################################################################

@@ -3,7 +3,11 @@ from database import engine
 import models
 from routes import products, orders, category, staff, authentication, delivery,  customers
 
-app = FastAPI()
+app = FastAPI(
+    title='HarryDave Express',
+    description= 'Restful API for making request and orders',
+    version='0.0.1'
+)
 
 # connecting your model
 models.Base.metadata.create_all(engine)

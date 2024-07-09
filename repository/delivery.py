@@ -18,8 +18,6 @@ def create(request: schemas.Delivery, db: Session):
         order_id = request.order_id,
         staff_id = request.staff_id,
         customer_id = request.customer_id,
-        createdAt = request.createdAt,
-        updatedAt = request.updatedAt
     )
     db.add(delivery)
     db.commit()
