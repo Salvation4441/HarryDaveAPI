@@ -4,7 +4,7 @@ import models
 from routes import products, orders, category, staff, authentication, delivery,  customers
 
 app = FastAPI(
-    title='HarryDave Express',
+    title='Customer Making a Request',
     description= 'Restful API for making request and orders',
     version='0.0.1'
 )
