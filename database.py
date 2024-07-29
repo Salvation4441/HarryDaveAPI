@@ -3,9 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-# SQLALCHEMY_DATABASE_URL = 'sqlite:///./harrydave.db'
-# SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost/harryapp'
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:QHZCqQZReKSjglPGAlyLRUBahRGbIplF@postgres.railway.internal:5432/railway'
+# SQLALCHEMY_DATABASE_URL = 'sqlite:///./harrydave.db' //connection for sqlite
+# SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost/harryapp' #con for postgress
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:AIODGnorRTLwfLGxZTRgbVJOaZqBTxRE@monorail.proxy.rlwy.net:52572/railway'
+
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
