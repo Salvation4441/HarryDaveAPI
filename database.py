@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 # SQLALCHEMY_DATABASE_URL = 'sqlite:///./harrydave.db'
 # SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost/harryapp'
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:AlbclfovlsBNglKzhfQFupYQvfRRTNby@roundhouse.proxy.rlwy.net:24501/railway'
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:QHZCqQZReKSjglPGAlyLRUBahRGbIplF@postgres.railway.internal:5432/railway'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
